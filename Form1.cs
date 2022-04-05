@@ -10,11 +10,23 @@ using System.Windows.Forms;
 
 namespace Assign5
 {
-    public partial class Form1 : Form
+    public partial class Chess : Form
     {
-        public Form1()
+        Board b;
+
+        public Chess()
         {
             InitializeComponent();
+
+            //Set up board
+            b = new Board();
+            Game.Refresh();
+        }
+
+        private void Game_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            b.Draw(g, new SolidBrush(Color.White), new SolidBrush(Color.RoyalBlue));
         }
     }
 }
