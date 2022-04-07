@@ -43,9 +43,11 @@
             this.Game.TabIndex = 0;
             this.Game.TabStop = false;
             this.Game.Paint += new System.Windows.Forms.PaintEventHandler(this.Game_Paint);
+            this.Game.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Game_MouseClick);
             // 
             // ResultsLabel
             // 
+            this.ResultsLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ResultsLabel.AutoSize = true;
             this.ResultsLabel.Location = new System.Drawing.Point(809, 9);
             this.ResultsLabel.Name = "ResultsLabel";

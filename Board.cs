@@ -20,7 +20,14 @@ namespace Assign5
 {
     internal class Board : IDisposable
     {
-        private const int SQUARE_SIZE = 60;
+        public enum State
+        {
+            NORMAL = 0,
+            CHECK = 1,
+            CHECKMATE = 2
+        }
+
+        public const int SQUARE_SIZE = 60;
         public Piece[,] board;
 
         public Board()
@@ -29,14 +36,15 @@ namespace Assign5
         }
 
         /// <summary>
-        /// Responsible for drawing the board
+        /// Responsible for drawing the board, also highlight where a piece can move and the current selected piece
         /// </summary>
         /// <param name="g"></param>
         /// <param name="white"></param>
         /// <param name="black"></param>
-        public void Draw(Graphics g, Brush white, Brush black)
+        public void Draw(Graphics g, Brush white, Brush black, Brush highlight, Point lastClicked, List<Point> points)
         {
             bool w = true;
+            //i is y (column), j is x (row)
             for(int i = 0; i < board.Length; i++)
             {
                 for (int j = 0; j < board.Length; j++)  //the board is square so who cares!
@@ -45,9 +53,14 @@ namespace Assign5
                                     j * SQUARE_SIZE, i * SQUARE_SIZE,
                                     SQUARE_SIZE, SQUARE_SIZE);
                     w = !w; //swap colors
+
+                    if(lastClicked.X != -1 && lastClicked.X == j && lastClicked.Y == i) //highlight the current clicked square
+                        g.FillRectangle(highlight, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                 }
                 w = !w; //swap colors
             }
+
+            //g.FillRectangle(highlight, 1 * SQUARE_SIZE, 0 * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
 
         /// <summary>

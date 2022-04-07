@@ -9,3 +9,4 @@ C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.csproj.CoreCompileInputs.cache
 C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.exe
 C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.pdb
 C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.Chess.resources
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-pawn.png

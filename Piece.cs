@@ -17,12 +17,79 @@ using System.Drawing;
 
 namespace Assign5
 {
-    abstract class Piece
+    public abstract class Piece
     {
-        protected Image pieceImage;
-        public bool black;   //is piece "black" or "white"?
         public Point location;
+        protected Image pieceImage;
+        public bool isBlack;   //is piece "black" or "white"?
+        public Size size = new Size(Board.SQUARE_SIZE, Board.SQUARE_SIZE);
 
+        /// <summary>
+        /// Constructor for a new piece, sets the location of the piece
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public Piece(int x, int y, bool black)
+        {
+            location = new Point(x, y);
+            isBlack = black;
+        }
+
+        public abstract List<Point> GetMovablePoints();
         public abstract void DrawPiece(Graphics g);
+    }
+
+    public class Pawn : Piece
+    {
+        public Pawn(int x, int y, bool black) : base(x, y, black)
+        {
+            string path = black ? @".\icons\black\chess-pawn.png" : @".\icons\black\chess-pawn.png";
+            pieceImage = Image.FromFile(path);
+        }
+
+        public override List<Point> GetMovablePoints()
+        {
+            return null;
+        }
+
+        public override void DrawPiece(Graphics g)
+        {
+            Point loc = new Point(location.X*Board.SQUARE_SIZE, location.Y*Board.SQUARE_SIZE);
+            Rectangle rect = new Rectangle(loc, size);
+            g.DrawImage(pieceImage, rect);
+        }
+    }
+
+    public class Rook : Piece
+    {
+        public Rook(int x, int y, bool black) : base(x, y, black) { }
+
+        public override List<Point> GetMovablePoints()
+        {
+            return null;
+        }
+
+        public override void DrawPiece(Graphics g)
+        {
+            
+        }
+    }
+
+    public class Knight : Piece
+    {
+        public Knight(int x, int y, bool black) : base(x, y, black)
+        {
+
+        }
+
+        public override List<Point> GetMovablePoints()
+        {
+            return null;
+        }
+
+        public override void DrawPiece(Graphics g)
+        {
+
+        }
     }
 }
