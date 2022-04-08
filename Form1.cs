@@ -38,12 +38,14 @@ namespace Assign5
         public static Image queenImgB = Image.FromFile(@".\icons\black\chess-queen.png");
         #endregion
 
+        //console stuff
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
         Board b;
         Point lastClicked = new Point(-1, -1);
+        Piece lastSelected = null;
 
         Player player1 = new Player(true);
         Player player2 = new Player(false);
@@ -54,6 +56,19 @@ namespace Assign5
 
             //Set up board
             b = new Board();
+
+            //place pieces on board
+            foreach(Piece p in player1.pieces)
+            {
+                b.board[p.location.X, p.location.Y] = p;
+            }
+
+            //place pieces on board
+            foreach (Piece p in player2.pieces)
+            {
+                b.board[p.location.X, p.location.Y] = p;
+            }
+
             Game.Refresh();
 
             AllocConsole();
@@ -71,7 +86,7 @@ namespace Assign5
             using(Brush rb = new SolidBrush(Color.RoyalBlue))
             using(Brush y = new SolidBrush(Color.Yellow))
             {
-                b.Draw(g, w, rb, y, lastClicked, null);
+                b.Draw(g, w, rb, y, lastClicked);
             }
             
             foreach (Piece p in player1.pieces)  //draw player1 pieces
@@ -100,9 +115,21 @@ namespace Assign5
             lastClicked.X = xLoc;
             lastClicked.Y = yLoc;
 
+            //There is a piece here
+            if(b.board[xLoc, yLoc] != null)
+            {
+                b.PossiblePoints = b.board[xLoc, yLoc].GetMovablePoints(b);
+                lastSelected = b.board[xLoc, yLoc];
+            } else
+            {
+                b.PossiblePoints = null;
+                lastSelected = null;
+            }
+
             Game.Refresh(); //update the board
 
-            Console.WriteLine(string.Format("{0}, {1}", xLoc, yLoc));
+            if(b.board[xLoc, yLoc] != null)
+                Console.WriteLine(string.Format("Piece: {0}", b.board[xLoc, yLoc].Name));//xLoc, yLoc));
         }
     }
 }

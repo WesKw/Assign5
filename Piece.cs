@@ -26,6 +26,13 @@ namespace Assign5
         protected Image pieceImage; //actual piece image
         public bool isBlack;   //is piece "black" or "white"?
         public Size size = new Size(Board.SQUARE_SIZE, Board.SQUARE_SIZE);  //image size
+        private string name;
+
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
 
         /// <summary>
         /// Constructor for a new piece, sets the location of the piece
@@ -72,11 +79,32 @@ namespace Assign5
         public Pawn(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "Pawn";
         }
 
+        /// <summary>
+        /// Pawns can move +1 space forward, move diagonal if piece is 1 space diagonal
+        /// </summary>
+        /// <param name="boardState"></param>
+        /// <returns></returns>
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+            //black pieces on top, white on bottom
+            int offset = isBlack ? -1 : 1;
+
+            Point initial = new Point(location.X, location.Y + offset);
+            Point possible1 = new Point(location.X + offset, location.Y + offset);
+            Point possible2 = new Point(location.X - offset, location.Y + offset);
+
+            if (initial.Y < boardState.board.Length && initial.Y >= 0)
+                points.Add(initial);
+            if (possible1.X >= 0 && possible1.X < 8 && possible1.Y >= 0 && possible1.Y < 8)
+                if (boardState.board[possible1.X, possible1.Y] != null) points.Add(possible1);
+            if (possible2.X >= 0 && possible2.X < 8 && possible2.Y >= 0 && possible2.Y < 8)
+                if (boardState.board[possible2.X, possible2.Y] != null) points.Add(possible2);
+
+            return points;
         }
     }
 
@@ -95,6 +123,7 @@ namespace Assign5
         public Rook(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "Rook";
         }
 
         public override List<Point> GetMovablePoints(Board boardState)
@@ -118,6 +147,7 @@ namespace Assign5
         public Knight(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "Knight";
         }
 
         public override List<Point> GetMovablePoints(Board boardState)
@@ -141,6 +171,7 @@ namespace Assign5
         public Bishop(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "Bishop";
         }
 
         public override List<Point> GetMovablePoints(Board boardState)
@@ -164,6 +195,7 @@ namespace Assign5
         public Queen(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "Queen";
         }
 
         public override List<Point> GetMovablePoints(Board boardState)
@@ -187,6 +219,7 @@ namespace Assign5
         public King(int x, int y, bool black, Image img) : base(x, y, black, img)
         {
             pieceImage = img;
+            Name = "King";
         }
 
         public override List<Point> GetMovablePoints(Board boardState)

@@ -29,6 +29,13 @@ namespace Assign5
 
         public const int SQUARE_SIZE = 60;
         public Piece[,] board;
+        private List<Point> possiblePoints = null;
+
+        public List<Point> PossiblePoints
+        {
+            get => possiblePoints;
+            set => possiblePoints = value;
+        }
 
         public Board()
         {
@@ -41,7 +48,7 @@ namespace Assign5
         /// <param name="g"></param>
         /// <param name="white"></param>
         /// <param name="black"></param>
-        public void Draw(Graphics g, Brush white, Brush black, Brush highlight, Point lastClicked, List<Point> points)
+        public void Draw(Graphics g, Brush white, Brush black, Brush highlight, Point lastClicked)
         {
             bool w = true;
             //i is y (column), j is x (row)
@@ -58,6 +65,14 @@ namespace Assign5
                         g.FillRectangle(highlight, j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                 }
                 w = !w; //swap colors
+            }
+
+            if(PossiblePoints != null)
+            {
+                foreach(Point p in PossiblePoints)
+                {
+                    g.FillRectangle(highlight, p.X * SQUARE_SIZE, p.Y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                }
             }
 
             //g.FillRectangle(highlight, 1 * SQUARE_SIZE, 0 * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
