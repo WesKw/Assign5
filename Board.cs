@@ -18,7 +18,7 @@ using System.Drawing;
 
 namespace Assign5
 {
-    internal class Board : IDisposable
+    public class Board : IDisposable
     {
         public enum State
         {

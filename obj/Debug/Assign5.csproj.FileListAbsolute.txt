@@ -10,3 +10,14 @@ C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.exe
 C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.pdb
 C:\Users\kwiec\CSCI_473\Assign5\obj\Debug\Assign5.Chess.resources
 C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-pawn.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-bishop.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-king.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-knight.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-queen.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\black\chess-rook.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-bishop.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-king.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-knight.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-pawn.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-queen.png
+C:\Users\kwiec\CSCI_473\Assign5\bin\Debug\icons\white\chess-rook.png
