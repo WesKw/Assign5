@@ -24,7 +24,7 @@ namespace Assign5
     {
         public Point location;  //location of the piece on the canvas
         protected Image pieceImage; //actual piece image
-        public bool isBlack;   //is piece "black" or "white"?
+        private bool isBlack;   //is piece "black" or "white"?
         public Size size = new Size(Board.SQUARE_SIZE, Board.SQUARE_SIZE);  //image size
         private string name;
 
@@ -32,6 +32,12 @@ namespace Assign5
         {
             get => name;
             set => name = value;
+        }
+
+        public bool IsBlack
+        {
+            get => isBlack;
+            set => isBlack = value;
         }
 
         /// <summary>
@@ -91,14 +97,18 @@ namespace Assign5
         {
             List<Point> points = new List<Point>();
             //black pieces on top, white on bottom
-            int offset = isBlack ? -1 : 1;
+            int offset = IsBlack ? -1 : 1;
+            Piece p = boardState.board[location.X, location.Y + offset];
 
             Point initial = new Point(location.X, location.Y + offset);
             Point possible1 = new Point(location.X + offset, location.Y + offset);
             Point possible2 = new Point(location.X - offset, location.Y + offset);
 
-            if (initial.Y < boardState.board.Length && initial.Y >= 0)
+            //only add the point if there is no piece in front and on the board
+            if (initial.Y < boardState.board.Length && initial.Y >= 0 && p == null)
                 points.Add(initial);
+
+            //add the diagonal points if the pawn can attack a piece on the diagonal
             if (possible1.X >= 0 && possible1.X < 8 && possible1.Y >= 0 && possible1.Y < 8)
                 if (boardState.board[possible1.X, possible1.Y] != null) points.Add(possible1);
             if (possible2.X >= 0 && possible2.X < 8 && possible2.Y >= 0 && possible2.Y < 8)
@@ -126,9 +136,40 @@ namespace Assign5
             Name = "Rook";
         }
 
+        /// <summary>
+        /// Get the list of possible points that a rook can move to.
+        /// </summary>
+        /// <param name="boardState">The state of the current board</param>
+        /// <returns></returns>
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+            int adjustment = IsBlack ? -1 : 1;
+
+            //Rooks can only move in a straight line forward
+            for (int i = 1; i < 8; i++) //start at 1 to avoid checking itself
+            {
+                int offset = i * adjustment;
+                Piece piece = boardState.board[location.X, location.Y + offset];
+                //if there is a piece in front of where we want to move rook cannot move further
+                if (piece != null && piece.IsBlack == IsBlack)  //if the pieces are the same color, we can't move
+                    break;
+
+                //Add the next point to the list of possible points
+                Point p = new Point(location.X, location.Y + offset);
+
+                //Console.WriteLine(string.Format("{0}, {1}", p.X, p.Y));
+
+                if(piece != null && piece.IsBlack != IsBlack)   //if pieces are a different color we can attack
+                {
+                    points.Add(p);  //add the point
+                    break;  //and stop because we can't move any further
+                }
+
+                points.Add(p);  //otherwise just add the point
+            }
+
+            return points;
         }
     }
 
@@ -150,9 +191,65 @@ namespace Assign5
             Name = "Knight";
         }
 
+        /// <summary>
+        /// The knight piece moves in an L shape, this function gets all possible
+        /// points of movement for a knight based on the current board state
+        /// </summary>
+        /// <param name="boardState"></param>
+        /// <returns></returns>
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+            
+            //Is this horrible mess better than manually typing out the points? Hmmmmm
+            //I think it probably is
+            for (int i = 0; i < 4; i++)
+            {
+                if(i % 2 == 0)  //if even move in x direction first
+                {
+                    int dir = i - 1;    //direction of the x offset
+                    Point p1 = new Point(location.X + (dir * 2), location.Y + 1);    //move up and down
+                    Point p2 = new Point(location.X + (dir * 2), location.Y - 1);
+
+                    if (p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) //if the point is on the board
+                        if (boardState.board[p1.X, p1.Y] == null || 
+                           (boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
+                        {
+
+                            points.Add(p1);
+                        }
+
+                    if (p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8) //if the point is on the board
+                        if (boardState.board[p2.X, p2.Y] == null || 
+                           (boardState.board[p2.X, p2.Y] != null && boardState.board[p2.X, p2.Y].IsBlack != IsBlack))
+                        {
+                            points.Add(p2);
+                        }
+
+                } else //move in y direction first
+                {
+                    int dir = i - 2;    //direction of the y offset
+                    Point p1 = new Point(location.X + 1, location.Y + (dir * 2));    //move left and right
+                    Point p2 = new Point(location.X - 1, location.Y + (dir * 2));
+
+                    if (p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) //if the point is on the board
+                        if (boardState.board[p1.X, p1.Y] == null ||
+                           (boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
+                        {
+
+                            points.Add(p1);
+                        }
+
+                    if (p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8) //if the point is on the board
+                        if (boardState.board[p2.X, p2.Y] == null ||
+                           (boardState.board[p2.X, p2.Y] != null && boardState.board[p2.X, p2.Y].IsBlack != IsBlack))
+                        {
+                            points.Add(p2);
+                        }
+                }
+            }
+
+            return points;
         }
     }
 
