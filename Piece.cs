@@ -5,7 +5,8 @@
  * 
  * Generic piece class, the base for all piece subclasses.
  * 
- * Wesley was responsible for this class.
+ * Wesley was responsible for the abstract class and the Pawn, Rook, and Knight classes.
+ * Ojas was responsible for the Bishop, Queen, and King classes.
 */
 
 using System;

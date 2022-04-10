@@ -1,4 +1,14 @@
-﻿using System;
+﻿/**
+ * Authors: Wesley Kwiecinski - Z1896564, Ojas DhiYogi - Z1849680
+ * CSCI 473 Assignment 5
+ * Due 4/14/2022
+ * 
+ * Form that handles updating the board and player information, calls draw methods
+ * 
+ * Wesley was responsible for this class.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

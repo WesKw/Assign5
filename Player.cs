@@ -1,4 +1,14 @@
-﻿using System;
+﻿/**
+ * Authors: Wesley Kwiecinski - Z1896564, Ojas DhiYogi - Z1849680
+ * CSCI 473 Assignment 5
+ * Due 4/14/2022
+ * 
+ * Player class. Handles creating the pieces of the board and removing them when necessary
+ * 
+ * Wesley was responsible for this class.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +18,6 @@ namespace Assign5
 {
     internal class Player : IDisposable
     {
-        public bool theirTurn = false;
         public int deadPieces = 0;
         private List<Piece> pieces = null;
 
@@ -24,7 +33,6 @@ namespace Assign5
         ///                    True => White, False => black</param>
         public Player(bool turn = false)
         {
-            theirTurn = turn;
             pieces = new List<Piece>(16);
 
             if(turn)    //white piece
