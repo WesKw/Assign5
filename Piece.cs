@@ -20,7 +20,7 @@ namespace Assign5
     /// <summary>
     /// Generic piece class, defines draw function
     /// </summary>
-    public abstract class Piece
+    public abstract class Piece : IDisposable
     {
         public Point location;  //location of the piece on the canvas
         protected Image pieceImage; //actual piece image
@@ -51,6 +51,12 @@ namespace Assign5
             isBlack = black;
         }
 
+        public void MoveTo(int x, int y)
+        {
+            location.X = x;
+            location.Y = y;
+        }
+
         /// <summary>
         /// Gets the movable points of the piece. Changes based on the piece and gamestate.
         /// </summary>
@@ -67,6 +73,11 @@ namespace Assign5
             Point loc = new Point(location.X * Board.SQUARE_SIZE, location.Y * Board.SQUARE_SIZE);
             Rectangle rect = new Rectangle(loc, size);
             g.DrawImage(pieceImage, rect);
+        }
+
+        public void Dispose()
+        {
+            pieceImage = null;
         }
     }
 
@@ -110,9 +121,11 @@ namespace Assign5
 
             //add the diagonal points if the pawn can attack a piece on the diagonal
             if (possible1.X >= 0 && possible1.X < 8 && possible1.Y >= 0 && possible1.Y < 8)
-                if (boardState.board[possible1.X, possible1.Y] != null) points.Add(possible1);
+                if (boardState.board[possible1.X, possible1.Y] != null && boardState.board[possible1.X, possible1.Y].IsBlack != IsBlack)
+                    points.Add(possible1);
             if (possible2.X >= 0 && possible2.X < 8 && possible2.Y >= 0 && possible2.Y < 8)
-                if (boardState.board[possible2.X, possible2.Y] != null) points.Add(possible2);
+                if (boardState.board[possible2.X, possible2.Y] != null && boardState.board[possible2.X, possible2.Y].IsBlack != IsBlack) 
+                    points.Add(possible2);
 
             return points;
         }

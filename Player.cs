@@ -10,7 +10,12 @@ namespace Assign5
     {
         public bool theirTurn = false;
         public int deadPieces = 0;
-        public List<Piece> pieces = null;
+        private List<Piece> pieces = null;
+
+        public List<Piece> Pieces
+        {
+            get => pieces;
+        }
 
         /// <summary>
         /// Player constructor
@@ -90,9 +95,23 @@ namespace Assign5
             }
         }
 
+        /// <summary>
+        /// Removes a piece in the event that piece collide
+        /// </summary>
+        /// <param name="piece"></param>
+        public void RemovePiece(Piece piece)
+        {
+            if(pieces.Contains(piece))
+            {
+                pieces.Remove(piece);
+            }
+        }
+
         public void Dispose()
         {
-
+            foreach(Piece p in pieces)
+                p.Dispose();
+            pieces.Clear();
         }
     }
 }

@@ -43,12 +43,14 @@ namespace Assign5
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
+        bool player1Turn = true;
         Board b;
         Point lastClicked = new Point(-1, -1);
         Piece lastSelected = null;
 
         Player player1 = new Player(true);
         Player player2 = new Player(false);
+        Player currentPlayer = null;
 
         public Chess()
         {
@@ -58,16 +60,18 @@ namespace Assign5
             b = new Board();
 
             //place pieces on board
-            foreach(Piece p in player1.pieces)
+            foreach(Piece p in player1.Pieces)
             {
                 b.board[p.location.X, p.location.Y] = p;
             }
 
             //place pieces on board
-            foreach (Piece p in player2.pieces)
+            foreach (Piece p in player2.Pieces)
             {
                 b.board[p.location.X, p.location.Y] = p;
             }
+
+            currentPlayer = player1;
 
             Game.Refresh();
 
@@ -89,12 +93,12 @@ namespace Assign5
                 b.Draw(g, w, rb, y, lastClicked);
             }
             
-            foreach (Piece p in player1.pieces)  //draw player1 pieces
+            foreach (Piece p in player1.Pieces)  //draw player1 pieces
             {
                 p.DrawPiece(g);
             }
 
-            foreach (Piece p in player2.pieces)  //draw player2 pieces
+            foreach (Piece p in player2.Pieces)  //draw player2 pieces
             {
                 p.DrawPiece(g);
             }
@@ -112,24 +116,64 @@ namespace Assign5
             int xLoc = p.X / Board.SQUARE_SIZE;
             int yLoc = p.Y / Board.SQUARE_SIZE;
 
-            lastClicked.X = xLoc;
-            lastClicked.Y = yLoc;
-
-            //There is a piece here
-            if(b.board[xLoc, yLoc] != null)
+            if (lastSelected != null && b.PossiblePoints != null)   //we want to do something if a piece was selected
             {
-                b.PossiblePoints = b.board[xLoc, yLoc].GetMovablePoints(b);
-                lastSelected = b.board[xLoc, yLoc];
+                bool moved = false;
+                //check if the desired point is in our list of points
+                foreach(Point point in b.PossiblePoints)
+                {
+                    if(point.X == xLoc && point.Y == yLoc)
+                    {
+                        Piece piece = b.board[lastClicked.X, lastClicked.Y];
+                        Console.WriteLine(String.Format("Move piece to {0}, {1}", xLoc, yLoc));
+
+                        //piece collision, not-current-turn player loses their piece
+                        if(b.board[xLoc, yLoc] != null && !currentPlayer.Pieces.Contains(b.board[xLoc, yLoc]))
+                        {
+                            Player otherPlayer = currentPlayer == player1 ? player2 : player1;
+                            otherPlayer.Pieces.Remove(b.board[xLoc, yLoc]);
+                            b.board[xLoc, yLoc] = null;
+                        }
+
+                        piece.MoveTo(xLoc, yLoc);   //update piece location internally
+                        b.board[xLoc, yLoc] = piece;//update location on the board
+                        b.board[lastClicked.X, lastClicked.Y] = null;   //remove the piece in the last location
+                        moved = true;
+                        break;  //exit the loop
+                    }
+                }
+
+                lastSelected = null;
+                b.PossiblePoints = null;
+                lastClicked.X = -1; //reset last clicked
+                lastClicked.Y = -1;
+                Game.Refresh();
+
+                if (!moved) return; //if we didn't move at all, the game state doesn't change
+                currentPlayer = currentPlayer == player1 ? player2 : player1;   //only update the current player if a piece moves
+
             } else
             {
-                b.PossiblePoints = null;
-                lastSelected = null;
+                lastClicked.X = xLoc;
+                lastClicked.Y = yLoc;
+
+                //There is a piece here
+                if (b.board[xLoc, yLoc] != null && currentPlayer.Pieces.Contains(b.board[xLoc, yLoc]))
+                {
+                    b.PossiblePoints = b.board[xLoc, yLoc].GetMovablePoints(b);
+                    lastSelected = b.board[xLoc, yLoc];
+                }
+                else
+                {
+                    b.PossiblePoints = null;
+                    lastSelected = null;
+                }
+
+                Game.Refresh(); //update the board
+
+                if (b.board[xLoc, yLoc] != null)
+                    Console.WriteLine(string.Format("Piece: {0}", b.board[xLoc, yLoc].Name));//xLoc, yLoc));
             }
-
-            Game.Refresh(); //update the board
-
-            if(b.board[xLoc, yLoc] != null)
-                Console.WriteLine(string.Format("Piece: {0}", b.board[xLoc, yLoc].Name));//xLoc, yLoc));
         }
     }
 }
