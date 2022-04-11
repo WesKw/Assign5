@@ -53,24 +53,32 @@ namespace Assign5
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        bool player1Turn = true;
+        bool check = false;
         Board b;
         Point lastClicked = new Point(-1, -1);
         Piece lastSelected = null;
 
-        Player player1 = new Player(true);
-        Player player2 = new Player(false);
+        Player player1 = null;// new Player(true);
+        Player player2 = null;// new Player(false);
         Player currentPlayer = null;
 
         public Chess()
         {
             InitializeComponent();
+            AllocConsole();
+            ResetGame();
+        }
+
+        private void ResetGame()
+        {
+            player1 = new Player(true);
+            player2 = new Player(false);
 
             //Set up board
             b = new Board();
-
+            
             //place pieces on board
-            foreach(Piece p in player1.Pieces)
+            foreach (Piece p in player1.Pieces)
             {
                 b.board[p.location.X, p.location.Y] = p;
             }
@@ -83,9 +91,11 @@ namespace Assign5
 
             currentPlayer = player1;
 
+            CurrentPlayerLabel.Text = "Current Turn: White";
+            CheckmateLabel.Text = "";
+
             Game.Refresh();
 
-            AllocConsole();
         }
 
         /// <summary>
@@ -102,7 +112,7 @@ namespace Assign5
             {
                 b.Draw(g, w, rb, y, lastClicked);
             }
-            
+           
             foreach (Piece p in player1.Pieces)  //draw player1 pieces
             {
                 p.DrawPiece(g);
@@ -128,6 +138,7 @@ namespace Assign5
 
             if (lastSelected != null && b.PossiblePoints != null)   //we want to do something if a piece was selected
             {
+                Player otherPlayer = currentPlayer == player1 ? player2 : player1;
                 bool moved = false;
                 //check if the desired point is in our list of points
                 foreach(Point point in b.PossiblePoints)
@@ -135,34 +146,64 @@ namespace Assign5
                     if(point.X == xLoc && point.Y == yLoc)
                     {
                         Piece piece = b.board[lastClicked.X, lastClicked.Y];
-                        Console.WriteLine(String.Format("Move piece to {0}, {1}", xLoc, yLoc));
+                        Piece othersPiece = b.board[xLoc, yLoc];
+                        bool killedPiece = false;
 
                         //piece collision, not-current-turn player loses their piece
-                        if(b.board[xLoc, yLoc] != null && !currentPlayer.Pieces.Contains(b.board[xLoc, yLoc]))
+                        if (othersPiece != null && !currentPlayer.Pieces.Contains(othersPiece))
                         {
-                            Player otherPlayer = currentPlayer == player1 ? player2 : player1;
-                            otherPlayer.Pieces.Remove(b.board[xLoc, yLoc]);
                             b.board[xLoc, yLoc] = null;
+                            killedPiece = true;
                         }
 
                         piece.MoveTo(xLoc, yLoc);   //update piece location internally
                         b.board[xLoc, yLoc] = piece;//update location on the board
                         b.board[lastClicked.X, lastClicked.Y] = null;   //remove the piece in the last location
                         moved = true;
+
+                        //if the king is vulnerable at the new location we need to reset the pieces
+                        if (IsCheck(otherPlayer))
+                        {
+                            piece.MoveTo(lastClicked.X, lastClicked.Y);
+                            b.board[xLoc, yLoc] = othersPiece;
+                            b.board[lastClicked.X, lastClicked.Y] = piece;
+                            ResetSelection();
+                            return;
+                        }
+
+                        //if the king is not vulnerable and a piece has been killed we 
+                        //can safely remove it from the board
+                        if(killedPiece)
+                            otherPlayer.Pieces.Remove(othersPiece);
+
                         break;  //exit the loop
                     }
                 }
 
-                lastSelected = null;
-                b.PossiblePoints = null;
-                lastClicked.X = -1; //reset last clicked
-                lastClicked.Y = -1;
-                Game.Refresh();
+                ResetSelection();
 
                 if (!moved) return; //if we didn't move at all, the game state doesn't change
-                currentPlayer = currentPlayer == player1 ? player2 : player1;   //only update the current player if a piece moves
+
+                currentPlayer = otherPlayer;   //only update the current player if a piece moves
                 CurrentPlayerLabel.Text = currentPlayer == player1 ? "Current Turn: White" : "Current Turn: Black";
 
+                //if successfully moved, need to check if the move results in a check for the new player
+                if (IsCheck(otherPlayer))
+                {
+                    check = true;
+                    CheckmateLabel.Text = "Check";  //update the check label to indicate the check
+
+                    if (IsCheckmate())
+                    {
+                        EndGame();
+                        return;
+                    }
+                }
+                else
+                {
+                    check = false;
+                    CheckmateLabel.Text = "";
+                }
             } else
             {
                 lastClicked.X = xLoc;
@@ -181,10 +222,54 @@ namespace Assign5
                 }
 
                 Game.Refresh(); //update the board
-
-                if (b.board[xLoc, yLoc] != null)
-                    Console.WriteLine(string.Format("Piece: {0}", b.board[xLoc, yLoc].Name));//xLoc, yLoc));
             }
+        }
+
+        //Checks if the player's king would be in attacking range at the new point
+        /// <summary>
+        /// Checks if moving a piece exposes the current player's king to an attack
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private bool IsCheck(Player otherPlayer)
+        {
+            //check if any pieces on the other side can attack the king at the new piece point
+            foreach(Piece p in otherPlayer.Pieces)
+            {
+                List<Point> points = p.GetMovablePoints(b);
+                if(points != null)
+                {
+                    foreach (Point pt in points)
+                    {
+                        if (pt.X == currentPlayer.King.location.X && pt.Y == currentPlayer.King.location.Y)  //if one of the attacking points includes the king
+                        {
+                            return true;    //then check if it's a checkmate?
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsCheckmate()
+        {
+            return false;
+        }
+
+        private void EndGame()
+        {
+
+        }
+
+        private void ResetSelection()
+        {
+            lastSelected = null;
+            b.PossiblePoints = null;
+            lastClicked.X = -1; //reset last clicked
+            lastClicked.Y = -1;
+            Game.Refresh();
         }
     }
 }

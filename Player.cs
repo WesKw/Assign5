@@ -20,10 +20,16 @@ namespace Assign5
     {
         public int deadPieces = 0;
         private List<Piece> pieces = null;
+        private Piece king;
 
         public List<Piece> Pieces
         {
             get => pieces;
+        }
+
+        public Piece King
+        {
+            get => king;
         }
 
         /// <summary>
@@ -66,6 +72,7 @@ namespace Assign5
                 King king = new King(4, 7, turn, Chess.kingImgW);
                 Queen queen =  new Queen(3, 7, turn, Chess.queenImgW);
                 pieces.Add(king);
+                this.king = king;
                 pieces.Add(queen);
 
             } else //black piece
@@ -99,6 +106,7 @@ namespace Assign5
                 King king = new King(4, 0, turn, Chess.kingImgB);
                 Queen queen = new Queen(3, 0, turn, Chess.queenImgB);
                 pieces.Add(king);
+                this.king = king;
                 pieces.Add(queen);
             }
         }

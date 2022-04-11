@@ -158,29 +158,68 @@ namespace Assign5
         public override List<Point> GetMovablePoints(Board boardState)
         {
             List<Point> points = new List<Point>();
-            int adjustment = IsBlack ? -1 : 1;
 
-            //Rooks can only move in a straight line forward
-            for (int i = 1; i < 8; i++) //start at 1 to avoid checking itself
+            //Is this horrible mess better than manually typing out the points? Hmmmmm
+            //I think it probably is
+            for (int i = 0; i < 4; i++)
             {
-                int offset = i * adjustment;
-                Piece piece = boardState.board[location.X, location.Y + offset];
-                //if there is a piece in front of where we want to move rook cannot move further
-                if (piece != null && piece.IsBlack == IsBlack)  //if the pieces are the same color, we can't move
-                    break;
-
-                //Add the next point to the list of possible points
-                Point p = new Point(location.X, location.Y + offset);
-
-                //Console.WriteLine(string.Format("{0}, {1}", p.X, p.Y));
-
-                if(piece != null && piece.IsBlack != IsBlack)   //if pieces are a different color we can attack
+                if (i % 2 == 0)  //if even move in x direction
                 {
-                    points.Add(p);  //add the point
-                    break;  //and stop because we can't move any further
-                }
+                    bool stop = false;
+                    int dir = i - 1;
+                    int j = 1;
+                    while (j < 8)  //move in both x directions until we hit a friendly
+                    {
+                        Point p1 = new Point(location.X + j * dir, location.Y);
 
-                points.Add(p);  //otherwise just add the point
+                        if ((p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) && !stop) //if the point is on the board
+                        {
+                            if (boardState.board[p1.X, p1.Y] == null)
+                                points.Add(p1);
+                            else if ((boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
+                            {
+                                points.Add(p1);
+                                break;
+                            } else if (boardState.board[p1.X, p1.Y].IsBlack == IsBlack) //must be same color
+                            {
+                                break;
+                            }
+                        } else
+                        {
+                            break;
+                        }
+
+                        j++;
+                    }
+                }
+                else //move in y direction
+                {
+                    bool stop = false;
+                    int j = 1;
+                    int dir = i - 2;
+                    while (j < 8)  //move in both x directions until we hit a friendly
+                    {
+                        Point p1 = new Point(location.X, location.Y + j * dir);
+
+                        if ((p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) && !stop) //if the point is on the board
+                        {
+                            if (boardState.board[p1.X, p1.Y] == null)
+                                points.Add(p1);
+                            else if (boardState.board[p1.X, p1.Y].IsBlack != IsBlack)
+                            {
+                                points.Add(p1);
+                                break;
+                            } else if (boardState.board[p1.X, p1.Y].IsBlack == IsBlack) //must be same color
+                            {
+                                break;
+                            }
+                        } else
+                        {
+                            break;
+                        }
+                        j++;
+                    }
+                }
             }
 
             return points;
@@ -214,9 +253,7 @@ namespace Assign5
         public override List<Point> GetMovablePoints(Board boardState)
         {
             List<Point> points = new List<Point>();
-            
-            //Is this horrible mess better than manually typing out the points? Hmmmmm
-            //I think it probably is
+
             for (int i = 0; i < 4; i++)
             {
                 if(i % 2 == 0)  //if even move in x direction first

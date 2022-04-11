@@ -52,9 +52,9 @@ namespace Assign5
         {
             bool w = true;
             //i is y (column), j is x (row)
-            for(int i = 0; i < board.Length; i++)
+            for(int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < board.Length; j++)  //the board is square so who cares!
+                for (int j = 0; j < 8; j++)  //the board is square so who cares!
                 {
                     g.FillRectangle(w == true ? white : black,
                                     j * SQUARE_SIZE, i * SQUARE_SIZE,

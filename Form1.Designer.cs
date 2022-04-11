@@ -31,6 +31,7 @@
             this.Game = new System.Windows.Forms.PictureBox();
             this.ResultsLabel = new System.Windows.Forms.Label();
             this.CurrentPlayerLabel = new System.Windows.Forms.Label();
+            this.CheckmateLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Game)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,6 +59,7 @@
             // 
             // CurrentPlayerLabel
             // 
+            this.CurrentPlayerLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CurrentPlayerLabel.AutoSize = true;
             this.CurrentPlayerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CurrentPlayerLabel.Location = new System.Drawing.Point(12, 622);
@@ -66,12 +68,22 @@
             this.CurrentPlayerLabel.TabIndex = 2;
             this.CurrentPlayerLabel.Text = "Current Turn: White";
             // 
+            // CheckmateLabel
+            // 
+            this.CheckmateLabel.AutoSize = true;
+            this.CheckmateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CheckmateLabel.Location = new System.Drawing.Point(495, 622);
+            this.CheckmateLabel.Name = "CheckmateLabel";
+            this.CheckmateLabel.Size = new System.Drawing.Size(0, 20);
+            this.CheckmateLabel.TabIndex = 3;
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1029, 662);
+            this.Controls.Add(this.CheckmateLabel);
             this.Controls.Add(this.CurrentPlayerLabel);
             this.Controls.Add(this.ResultsLabel);
             this.Controls.Add(this.Game);
@@ -89,6 +101,7 @@
         private System.Windows.Forms.PictureBox Game;
         private System.Windows.Forms.Label ResultsLabel;
         private System.Windows.Forms.Label CurrentPlayerLabel;
+        private System.Windows.Forms.Label CheckmateLabel;
     }
 }
 
