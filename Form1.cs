@@ -5,7 +5,7 @@
  * 
  * Form that handles updating the board and player information, calls draw methods
  * 
- * Wesley was responsible for this class.
+ * Wesley and Ojas were responsible for this class.
 */
 
 using System;
@@ -161,6 +161,7 @@ namespace Assign5
 
                 if (!moved) return; //if we didn't move at all, the game state doesn't change
                 currentPlayer = currentPlayer == player1 ? player2 : player1;   //only update the current player if a piece moves
+                CurrentPlayerLabel.Text = currentPlayer == player1 ? "Current Turn: White" : "Current Turn: Black";
 
             } else
             {
