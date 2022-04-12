@@ -148,6 +148,7 @@ namespace Assign5
                         Piece piece = b.board[lastClicked.X, lastClicked.Y];
                         Piece othersPiece = b.board[xLoc, yLoc];
                         bool killedPiece = false;
+                        
 
                         //piece collision, not-current-turn player loses their piece
                         if (othersPiece != null && !currentPlayer.Pieces.Contains(othersPiece))
@@ -164,9 +165,11 @@ namespace Assign5
                         //if the king is vulnerable at the new location we need to reset the pieces
                         if (IsCheck(otherPlayer))
                         {
+
                             piece.MoveTo(lastClicked.X, lastClicked.Y);
                             b.board[xLoc, yLoc] = othersPiece;
                             b.board[lastClicked.X, lastClicked.Y] = piece;
+                            feedbackBox.Text = "This king is vulnerable!";
                             ResetSelection();
                             return;
                         }
@@ -182,7 +185,11 @@ namespace Assign5
 
                 ResetSelection();
 
-                if (!moved) return; //if we didn't move at all, the game state doesn't change
+                if (!moved)
+                {
+                    feedbackBox.Text = "This spot isn't valid";
+                    return; //if we didn't move at all, the game state doesn't change
+                }
 
                 currentPlayer = otherPlayer;   //only update the current player if a piece moves
                 CurrentPlayerLabel.Text = currentPlayer == player1 ? "Current Turn: White" : "Current Turn: Black";
@@ -190,6 +197,7 @@ namespace Assign5
                 //if successfully moved, need to check if the move results in a check for the new player
                 if (IsCheck(otherPlayer))
                 {
+                    
                     check = true;
                     CheckmateLabel.Text = "Check";  //update the check label to indicate the check
 
@@ -202,6 +210,7 @@ namespace Assign5
                 else
                 {
                     check = false;
+                    feedbackBox.Text = "There is no checkmate";
                     CheckmateLabel.Text = "";
                 }
             } else
