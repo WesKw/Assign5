@@ -18,6 +18,7 @@ namespace Assign5
 {
     internal class Player : IDisposable
     {
+        public int killCount = 0;
         public int deadPieces = 0;
         private List<Piece> pieces = null;
         private Piece king;

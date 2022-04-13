@@ -198,7 +198,11 @@ namespace Assign5
                         //if the king is not vulnerable and a piece has been killed we 
                         //can safely remove it from the board
                         if (killedPiece)
+                        {
                             otherPlayer.Pieces.Remove(othersPiece);
+                            currentPlayer.killCount++;
+                        }
+                            
 
                         break;  //exit the loop
                     }
@@ -288,6 +292,14 @@ namespace Assign5
 
         public void Leaderboard()
         {
+            StringBuilder lb = new StringBuilder("Final Results");
+            lb.AppendFormat("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter);
+            lb.AppendFormat("There were", moveCounter, "moves this game");
+            lb.AppendFormat("Player 1 lost", player2.killCount, "piece(s)!");
+            lb.AppendFormat("Player 2 lost", player1.killCount, "piece(s)!");
+
+            
+
 
         }
         private bool IsCheckmate()
