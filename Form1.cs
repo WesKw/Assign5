@@ -48,11 +48,6 @@ namespace Assign5
         public static Image queenImgB = Image.FromFile(@".\icons\black\chess-queen.png");
         #endregion
 
-        //console stuff
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
-
         bool check = false;
         Board b;
         Point lastClicked = new Point(-1, -1);
@@ -72,7 +67,9 @@ namespace Assign5
         public Chess()
         {
             InitializeComponent();
-            AllocConsole();
+            //AllocConsole();
+            KeyPreview = true;
+            Time_Label.Anchor = AnchorStyles.None;
             ResetGame();
         }
 
@@ -106,6 +103,9 @@ namespace Assign5
             myTimer.Interval = 1000; // measured in milliseconds
             myTimer.Tick += new EventHandler(UpdateLabel);
             myTimer.Start();
+            tcounter = 0;
+
+            Time_Label.Text = "00:00";
 
             Game.Refresh();
         }
@@ -229,7 +229,8 @@ namespace Assign5
 
                     if (IsCheckmate())
                     {
-                        EndGame();
+                        //display the surrender button
+                        CheckmateLabel.Text = "CHECKMATE!";
                         return;
                     }
                 }
@@ -281,13 +282,14 @@ namespace Assign5
                     {
                         if (pt.X == currentPlayer.King.location.X && pt.Y == currentPlayer.King.location.Y)  //if one of the attacking points includes the king
                         {
-                            return true;    //then check if it's a checkmate?
+                            p.CanAttackKing = true;
+                            return true;
                         }
                     }
                 }
             }
 
-            return false;
+            return true;
         }
 
         public void Leaderboard()
@@ -302,8 +304,48 @@ namespace Assign5
 
 
         }
+
+        /// <summary>
+        /// If every possible move from the current player leaves their king vulnerable, checkmate!
+        /// </summary>
+        /// <returns>True for checkmate, false for no checkmate</returns>
         private bool IsCheckmate()
         {
+            Player otherPlayer = currentPlayer == player1 ? player2 : player1;
+
+            bool kingCannotMove = false;
+            //Can the king move out of the way?
+            List<Point> points = currentPlayer.King.GetMovablePoints(b);
+            if(points == null || points.Count == 0)
+                kingCannotMove = true;
+
+            //Can the attacking piece be removed from the board?
+            bool canRemove = false;
+            Piece attackingPiece = null;
+            //get the attacking piece
+            foreach (Piece piece in currentPlayer.Pieces)
+                if (piece.CanAttackKing) attackingPiece = piece; //found attacking piece
+            if (attackingPiece == null) return false;    //if there is no attacking piece then there can't be a checkmate!
+
+            //now we check if any of the other player's pieces can remove the attacking piece
+            foreach(Piece otherPiece in otherPlayer.Pieces)
+            {
+                List<Point> otherPoints = otherPiece.GetMovablePoints(b);
+                foreach (Point pt in otherPoints)
+                {
+                    if (pt.X == attackingPiece.location.X && pt.Y == attackingPiece.location.Y)
+                        canRemove = true;   //set removal flag
+                }
+            }
+
+            //Can the attack be blocked by another piece?
+            bool canBlock = false;
+            foreach(Piece other in otherPlayer.Pieces)
+            {
+
+            }
+
+
             return false;
         }
 
@@ -344,6 +386,19 @@ namespace Assign5
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             myTimer.Dispose();
+        }
+
+        /// <summary>
+        /// Resets or exits the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Chess_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+                this.Close();
+            else if (e.KeyChar == (char)Keys.Return)
+                ResetGame();
         }
     }
 }

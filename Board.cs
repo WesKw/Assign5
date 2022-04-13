@@ -78,17 +78,6 @@ namespace Assign5
             //g.FillRectangle(highlight, 1 * SQUARE_SIZE, 0 * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
 
-        /// <summary>
-        /// Updates the board by placing a boolean value at the given x and y.
-        /// Checks if other pieces exist, if it needs to take a piece, etc
-        /// </summary>
-        /// <param name="x">x location</param>
-        /// <param name="y">y location</param>
-        public void UpdateBoard(int x, int y)
-        {
-
-        }
-
         public void Dispose()
         {
             board = null;

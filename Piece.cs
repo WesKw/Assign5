@@ -5,8 +5,7 @@
  * 
  * Generic piece class, the base for all piece subclasses.
  * 
- * Wesley was responsible for the abstract class and the Pawn, Rook, and Knight classes.
- * Ojas was responsible for the Bishop, Queen, and King classes.
+ * Wesley was responsible for this class and its subsequent classes
 */
 
 using System;
@@ -28,6 +27,7 @@ namespace Assign5
         private bool isBlack;   //is piece "black" or "white"?
         public Size size = new Size(Board.SQUARE_SIZE, Board.SQUARE_SIZE);  //image size
         private string name;
+        private bool canAttackKing = false;
 
         public string Name
         {
@@ -39,6 +39,12 @@ namespace Assign5
         {
             get => isBlack;
             set => isBlack = value;
+        }
+
+        public bool CanAttackKing
+        {
+            get => canAttackKing;
+            set => canAttackKing = value;  
         }
 
         /// <summary>

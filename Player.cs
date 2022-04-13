@@ -28,6 +28,9 @@ namespace Assign5
             get => pieces;
         }
 
+        /// <summary>
+        /// Stores a constant reference to the king for ease of access.
+        /// </summary>
         public Piece King
         {
             get => king;
@@ -124,6 +127,9 @@ namespace Assign5
             }
         }
 
+        /// <summary>
+        /// Dispose every piece and clear the 
+        /// </summary>
         public void Dispose()
         {
             foreach(Piece p in pieces)
