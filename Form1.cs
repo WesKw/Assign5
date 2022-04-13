@@ -100,8 +100,13 @@ namespace Assign5
             CurrentPlayerLabel.Text = "Current Turn: White";
             CheckmateLabel.Text = "";
 
-            Game.Refresh();
+            myTimer = new System.Windows.Forms.Timer(); // Interval set to 1 second
 
+            myTimer.Interval = 1000; // measured in milliseconds
+            myTimer.Tick += new EventHandler(UpdateLabel);
+            myTimer.Start();
+
+            Game.Refresh();
         }
 
         /// <summary>
@@ -149,40 +154,47 @@ namespace Assign5
                 //check if the desired point is in our list of points
                 foreach(Point point in b.PossiblePoints)
                 {
-                    if(point.X == xLoc && point.Y == yLoc)
+                    if(point.X == xLoc && point.Y == yLoc)  //if the possible point matches the desired location
                     {
                         Piece piece = b.board[lastClicked.X, lastClicked.Y];
                         Piece othersPiece = b.board[xLoc, yLoc];
                         bool killedPiece = false;
-                        
 
                         //piece collision, not-current-turn player loses their piece
                         if (othersPiece != null && !currentPlayer.Pieces.Contains(othersPiece))
                         {
-                            b.board[xLoc, yLoc] = null;
-                            killedPiece = true;
+                            b.board[xLoc, yLoc].MoveTo(-10, -10);   //move piece "off of the board"
+                            b.board[xLoc, yLoc] = null; //set the spot to null
+                            killedPiece = true; //piece is temporarilly killed
                         }
 
                         piece.MoveTo(xLoc, yLoc);   //update piece location internally
                         b.board[xLoc, yLoc] = piece;//update location on the board
                         b.board[lastClicked.X, lastClicked.Y] = null;   //remove the piece in the last location
-                        moved = true;
 
                         //if the king is vulnerable at the new location we need to reset the pieces
                         if (IsCheck(otherPlayer))
                         {
-
-                            piece.MoveTo(lastClicked.X, lastClicked.Y);
-                            b.board[xLoc, yLoc] = othersPiece;
                             b.board[lastClicked.X, lastClicked.Y] = piece;
+                            piece.MoveTo(lastClicked.X, lastClicked.Y);
+
+                            if (othersPiece != null)    //if a piece was going to be killed
+                            {
+                                b.board[xLoc, yLoc] = othersPiece;
+                                b.board[xLoc, yLoc].MoveTo(xLoc, yLoc);
+                                killedPiece = false;
+                            }
+                            
                             feedbackBox.Text = "This king is vulnerable!";
                             ResetSelection();
                             return;
                         }
 
+                        moved = true;
+
                         //if the king is not vulnerable and a piece has been killed we 
                         //can safely remove it from the board
-                        if(killedPiece)
+                        if (killedPiece)
                             otherPlayer.Pieces.Remove(othersPiece);
 
                         break;  //exit the loop
@@ -250,6 +262,7 @@ namespace Assign5
         /// <returns></returns>
         private bool IsCheck(Player otherPlayer)
         {
+            Console.WriteLine(String.Format("Check if otherplayer can attack {0} king", currentPlayer.King.IsBlack ? "black" : "white"));
             //check if any pieces on the other side can attack the king at the new piece point
             foreach(Piece p in otherPlayer.Pieces)
             {
@@ -301,13 +314,13 @@ namespace Assign5
             myTimer.Enabled = true;
             myTimer.Interval = 1000; // measured in milliseconds
             myTimer.Tick += new EventHandler(UpdateLabel);
+
         }
 
         private void UpdateLabel(object source, EventArgs args)
         {
-            int minutes;
-            Time_Label.Text = "Time elapsed: " + ++tcounter;
-            minutes = (tcounter / 60000);
+            tcounter++;
+            int minutes = (tcounter / 60000);
             Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter);
         }
 

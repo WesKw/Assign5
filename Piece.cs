@@ -52,6 +52,18 @@ namespace Assign5
             isBlack = black;
         }
 
+        /// <summary>
+        /// Create a deep copy of the piece provided
+        /// </summary>
+        /// <param name="p"></param>
+        public Piece(Piece p)
+        {
+            name = p.Name;
+            location = p.location;
+            pieceImage = p.pieceImage;
+            IsBlack = p.IsBlack;
+        }
+
         public void MoveTo(int x, int y)
         {
             location.X = x;
@@ -110,6 +122,8 @@ namespace Assign5
             List<Point> points = new List<Point>();
             //black pieces on top, white on bottom
             int offset = IsBlack ? -1 : 1;
+            if (location.Y < 0 || location.Y > 7) return points;    //the new location is outside of the board
+
             Piece p = boardState.board[location.X, location.Y + offset];
 
             Point initial = new Point(location.X, location.Y + offset);
