@@ -67,6 +67,7 @@ namespace Assign5
         uint p2killCount = 0;
         public static System.Windows.Forms.Timer myTimer;
         public static int tcounter = 0;
+        public static int minutes = 0;
 
         public Chess()
         {
@@ -184,6 +185,8 @@ namespace Assign5
                                 b.board[xLoc, yLoc].MoveTo(xLoc, yLoc);
                                 killedPiece = false;
                             }
+
+                            b.board[xLoc, yLoc] = null;
                             
                             feedbackBox.Text = "This king is vulnerable!";
                             ResetSelection();
@@ -320,7 +323,8 @@ namespace Assign5
         private void UpdateLabel(object source, EventArgs args)
         {
             tcounter++;
-            int minutes = (tcounter / 60000);
+            minutes += (tcounter * 1000 / 60000);
+            if (tcounter * 1000 / 60000 != 0) tcounter = 0;
             Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter);
         }
 

@@ -52,18 +52,6 @@ namespace Assign5
             isBlack = black;
         }
 
-        /// <summary>
-        /// Create a deep copy of the piece provided
-        /// </summary>
-        /// <param name="p"></param>
-        public Piece(Piece p)
-        {
-            name = p.Name;
-            location = p.location;
-            pieceImage = p.pieceImage;
-            IsBlack = p.IsBlack;
-        }
-
         public void MoveTo(int x, int y)
         {
             location.X = x;
@@ -74,7 +62,7 @@ namespace Assign5
         /// Gets the movable points of the piece. Changes based on the piece and gamestate.
         /// </summary>
         /// <param name="boardState"></param>
-        /// <returns></returns>
+        /// <returns>The full list of points that the piece can move to</returns>
         public abstract List<Point> GetMovablePoints(Board boardState);
 
         /// <summary>
@@ -338,7 +326,98 @@ namespace Assign5
 
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+
+            int i = 1;
+            while(i < 8)
+            {
+                Point p = new Point(location.X + 1 * i, location.Y + 1 * i);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while (i < 8)
+            {
+                Point p = new Point(location.X + -1 * i, location.Y + 1 * i);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while (i < 8)
+            {
+                Point p = new Point(location.X + -1 * i, location.Y + -1 * i);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                i++;
+            }
+
+            i = 1;
+            while (i < 8)
+            {
+                Point p = new Point(location.X + 1 * i, location.Y + -1 * i);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                i++;
+            }
+
+
+            return points;
         }
     }
 
@@ -384,9 +463,38 @@ namespace Assign5
             Name = "King";
         }
 
+        /// <summary>
+        /// Gets the list of points for a king
+        /// </summary>
+        /// <param name="boardState">Current state of the board</param>
+        /// <returns>A list of possible points to move to</returns>
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+            
+            for (int i = 0; i < 4; i++)
+            {
+                if(i % 2 == 0)
+                {
+                    int dir = i - 1;
+                    Point p = new Point(location.X + 1 * dir, location.Y);
+                    if(p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8 )
+                    {
+                        if (boardState.board[p.X, p.Y] == null || (boardState.board[p.X, p.Y] != null && boardState.board[p.X, p.Y].IsBlack != IsBlack))
+                            points.Add(p);
+                    }
+                } else
+                {
+                    int dir = i - 2;
+                    Point p = new Point(location.X, location.Y + 1 * dir);
+                    if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                    {
+                        if (boardState.board[p.X, p.Y] == null || (boardState.board[p.X, p.Y] != null && boardState.board[p.X, p.Y].IsBlack != IsBlack))
+                            points.Add(p);
+                    }
+                }
+            }
+            return points;
         }
     }
 
