@@ -174,7 +174,7 @@ namespace Assign5
                         b.board[lastClicked.X, lastClicked.Y] = null;   //remove the piece in the last location
 
                         //if the king is vulnerable at the new location we need to reset the pieces
-                        if (IsCheck(otherPlayer))
+                        if (IsCheck())
                         {
                             b.board[lastClicked.X, lastClicked.Y] = piece;
                             piece.MoveTo(lastClicked.X, lastClicked.Y);
@@ -217,9 +217,9 @@ namespace Assign5
                 CurrentPlayerLabel.Text = currentPlayer == player1 ? "Current Turn: White" : "Current Turn: Black";
 
                 //if successfully moved, need to check if the move results in a check for the new player
-                if (IsCheck(otherPlayer))
+                if (IsCheck())
                 {
-                    
+                    Console.WriteLine("CHECK");
                     check = true;
                     CheckmateLabel.Text = "Check";  //update the check label to indicate the check
 
@@ -263,9 +263,10 @@ namespace Assign5
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private bool IsCheck(Player otherPlayer)
+        private bool IsCheck()
         {
-            Console.WriteLine(String.Format("Check if otherplayer can attack {0} king", currentPlayer.King.IsBlack ? "black" : "white"));
+            Player otherPlayer = currentPlayer == player1 ? player2 : player1;
+            Console.WriteLine(String.Format("Check if {1} can attack {0} king", currentPlayer.King.IsBlack ? "black" : "white", otherPlayer.King.IsBlack ? "Black" : "White"));
             //check if any pieces on the other side can attack the king at the new piece point
             foreach(Piece p in otherPlayer.Pieces)
             {
