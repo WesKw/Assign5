@@ -439,9 +439,172 @@ namespace Assign5
             Name = "Queen";
         }
 
+        /// <summary>
+        /// The most expensive point finding yet!
+        /// The queen is a combination of the rook and bishop point finders
+        /// </summary>
+        /// <param name="boardState"></param>
+        /// <returns></returns>
         public override List<Point> GetMovablePoints(Board boardState)
         {
-            return null;
+            List<Point> points = new List<Point>();
+
+            //Is this horrible mess better than manually typing out the points? Hmmmmm
+            //I think it probably is
+            for (int i = 0; i < 4; i++)
+            {
+                if (i % 2 == 0)  //if even move in x direction
+                {
+                    bool stop = false;
+                    int dir = i - 1;
+                    int j = 1;
+                    while (j < 8)  //move in both x directions until we hit a friendly
+                    {
+                        Point p1 = new Point(location.X + j * dir, location.Y);
+
+                        if ((p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) && !stop) //if the point is on the board
+                        {
+                            if (boardState.board[p1.X, p1.Y] == null)
+                                points.Add(p1);
+                            else if ((boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
+                            {
+                                points.Add(p1);
+                                break;
+                            }
+                            else if (boardState.board[p1.X, p1.Y].IsBlack == IsBlack) //must be same color
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                        j++;
+                    }
+                }
+                else //move in y direction
+                {
+                    bool stop = false;
+                    int j = 1;
+                    int dir = i - 2;
+                    while (j < 8)  //move in both x directions until we hit a friendly
+                    {
+                        Point p1 = new Point(location.X, location.Y + j * dir);
+
+                        if ((p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) && !stop) //if the point is on the board
+                        {
+                            if (boardState.board[p1.X, p1.Y] == null)
+                                points.Add(p1);
+                            else if (boardState.board[p1.X, p1.Y].IsBlack != IsBlack)
+                            {
+                                points.Add(p1);
+                                break;
+                            }
+                            else if (boardState.board[p1.X, p1.Y].IsBlack == IsBlack) //must be same color
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        j++;
+                    }
+                }
+            }
+
+            int k = 1;  //reset i
+            while (k < 8)
+            {
+                Point p = new Point(location.X + 1 * k, location.Y + 1 * k);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                k++;
+            }
+
+            k = 1;
+            while (k < 8)
+            {
+                Point p = new Point(location.X + -1 * k, location.Y + 1 * k);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                k++;
+            }
+
+            k = 1;
+            while (k < 8)
+            {
+                Point p = new Point(location.X + -1 * k, location.Y + -1 * k);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                k++;
+            }
+
+            k = 1;
+            while (k < 8)
+            {
+                Point p = new Point(location.X + 1 * k, location.Y + -1 * k);
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                {
+                    Piece piece = boardState.board[p.X, p.Y];
+                    if (piece == null)
+                        points.Add(p);
+                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    {
+                        points.Add(p);
+                        break;
+                    }
+                    else if (piece.IsBlack == IsBlack)
+                        break;
+                }
+                else
+                    break;
+                k++;
+            }
+
+            return points;
         }
     }
 
