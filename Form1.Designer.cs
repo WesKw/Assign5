@@ -33,7 +33,8 @@
             this.CurrentPlayerLabel = new System.Windows.Forms.Label();
             this.CheckmateLabel = new System.Windows.Forms.Label();
             this.feedbackBox = new System.Windows.Forms.RichTextBox();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.finalResults = new System.Windows.Forms.RichTextBox();
+            this.Time_Label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Game)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,13 +89,21 @@
             this.feedbackBox.TabIndex = 4;
             this.feedbackBox.Text = "";
             // 
-            // richTextBox2
+            // finalResults
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(814, 79);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(291, 548);
-            this.richTextBox2.TabIndex = 5;
-            this.richTextBox2.Text = "";
+            this.finalResults.Location = new System.Drawing.Point(814, 79);
+            this.finalResults.Name = "finalResults";
+            this.finalResults.Size = new System.Drawing.Size(291, 548);
+            this.finalResults.TabIndex = 5;
+            this.finalResults.Text = "";
+            // 
+            // Time_Label
+            // 
+            this.Time_Label.AutoSize = true;
+            this.Time_Label.Location = new System.Drawing.Point(925, 45);
+            this.Time_Label.Name = "Time_Label";
+            this.Time_Label.Size = new System.Drawing.Size(0, 20);
+            this.Time_Label.TabIndex = 6;
             // 
             // Chess
             // 
@@ -102,7 +111,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1158, 828);
-            this.Controls.Add(this.richTextBox2);
+            this.Controls.Add(this.Time_Label);
+            this.Controls.Add(this.finalResults);
             this.Controls.Add(this.feedbackBox);
             this.Controls.Add(this.CheckmateLabel);
             this.Controls.Add(this.CurrentPlayerLabel);
@@ -125,7 +135,8 @@
         private System.Windows.Forms.Label CurrentPlayerLabel;
         private System.Windows.Forms.Label CheckmateLabel;
         private System.Windows.Forms.RichTextBox feedbackBox;
-        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox finalResults;
+        private System.Windows.Forms.Label Time_Label;
     }
 }
 

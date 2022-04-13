@@ -62,6 +62,12 @@ namespace Assign5
         Player player2 = null;// new Player(false);
         Player currentPlayer = null;
 
+        uint moveCounter = 0;
+        uint p1killCount = 0;
+        uint p2killCount = 0;
+        public static System.Windows.Forms.Timer myTimer;
+        public static int tcounter = 0;
+
         public Chess()
         {
             InitializeComponent();
@@ -190,6 +196,7 @@ namespace Assign5
                     feedbackBox.Text = "This spot isn't valid";
                     return; //if we didn't move at all, the game state doesn't change
                 }
+                moveCounter += 1;
 
                 currentPlayer = otherPlayer;   //only update the current player if a piece moves
                 CurrentPlayerLabel.Text = currentPlayer == player1 ? "Current Turn: White" : "Current Turn: Black";
@@ -262,6 +269,10 @@ namespace Assign5
             return false;
         }
 
+        public void Leaderboard()
+        {
+
+        }
         private bool IsCheckmate()
         {
             return false;
@@ -279,6 +290,30 @@ namespace Assign5
             lastClicked.X = -1; //reset last clicked
             lastClicked.Y = -1;
             Game.Refresh();
+        }
+
+        public void Timer()
+        {
+            InitializeComponent();
+
+            myTimer = new System.Windows.Forms.Timer(); // Interval set to 10 seconds
+
+            myTimer.Enabled = true;
+            myTimer.Interval = 1000; // measured in milliseconds
+            myTimer.Tick += new EventHandler(UpdateLabel);
+        }
+
+        private void UpdateLabel(object source, EventArgs args)
+        {
+            int minutes;
+            Time_Label.Text = "Time elapsed: " + ++tcounter;
+            minutes = (tcounter / 60000);
+            Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            myTimer.Dispose();
         }
     }
 }
