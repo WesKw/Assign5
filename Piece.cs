@@ -110,7 +110,7 @@ namespace Assign5
     {
         private bool moved = false;
         
-        //checks if the pawn has moved or not
+        //checks if the pawn has moved or not, important for determining possible move points
         public bool Moved
         {
             get => moved;
