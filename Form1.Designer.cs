@@ -35,6 +35,7 @@
             this.feedbackBox = new System.Windows.Forms.RichTextBox();
             this.finalResults = new System.Windows.Forms.RichTextBox();
             this.Time_Label = new System.Windows.Forms.Label();
+            this.SurrenderButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Game)).BeginInit();
             this.SuspendLayout();
             // 
@@ -94,6 +95,7 @@
             // finalResults
             // 
             this.finalResults.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.finalResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.finalResults.Location = new System.Drawing.Point(724, 63);
             this.finalResults.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.finalResults.Name = "finalResults";
@@ -110,12 +112,27 @@
             this.Time_Label.Size = new System.Drawing.Size(0, 16);
             this.Time_Label.TabIndex = 6;
             // 
+            // SurrenderButton
+            // 
+            this.SurrenderButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.SurrenderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SurrenderButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.SurrenderButton.Location = new System.Drawing.Point(214, 615);
+            this.SurrenderButton.Name = "SurrenderButton";
+            this.SurrenderButton.Size = new System.Drawing.Size(275, 37);
+            this.SurrenderButton.TabIndex = 7;
+            this.SurrenderButton.Text = "Surrender?";
+            this.SurrenderButton.UseVisualStyleBackColor = true;
+            this.SurrenderButton.Visible = false;
+            this.SurrenderButton.Click += new System.EventHandler(this.SurrenderButton_Click);
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1029, 662);
+            this.Controls.Add(this.SurrenderButton);
             this.Controls.Add(this.Time_Label);
             this.Controls.Add(this.finalResults);
             this.Controls.Add(this.feedbackBox);
@@ -142,6 +159,7 @@
         private System.Windows.Forms.RichTextBox feedbackBox;
         private System.Windows.Forms.RichTextBox finalResults;
         private System.Windows.Forms.Label Time_Label;
+        private System.Windows.Forms.Button SurrenderButton;
     }
 }
 

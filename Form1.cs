@@ -48,6 +48,11 @@ namespace Assign5
         public static Image queenImgB = Image.FromFile(@".\icons\black\chess-queen.png");
         #endregion
 
+        //console stuff
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         bool check = false;
         Board b;
         Point lastClicked = new Point(-1, -1);
@@ -70,6 +75,7 @@ namespace Assign5
             //AllocConsole();
             KeyPreview = true;
             Time_Label.Anchor = AnchorStyles.None;
+            AllocConsole();
             ResetGame();
         }
 
@@ -106,6 +112,12 @@ namespace Assign5
             tcounter = 0;
 
             Time_Label.Text = "00:00";
+
+            feedbackBox.Text = "";
+
+            SurrenderButton.Visible = false;
+
+            finalResults.Text = "";
 
             Game.Refresh();
         }
@@ -223,14 +235,13 @@ namespace Assign5
                 //if successfully moved, need to check if the move results in a check for the new player
                 if (IsCheck())
                 {
-                    Console.WriteLine("CHECK");
                     check = true;
                     CheckmateLabel.Text = "Check";  //update the check label to indicate the check
-
                     if (IsCheckmate())
                     {
                         //display the surrender button
                         CheckmateLabel.Text = "CHECKMATE!";
+                        SurrenderButton.Visible = true;
                         return;
                     }
                 }
@@ -268,7 +279,7 @@ namespace Assign5
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private bool IsCheck()
+        private bool IsCheck(bool test = false)
         {
             Player otherPlayer = currentPlayer == player1 ? player2 : player1;
             Console.WriteLine(String.Format("Check if {1} can attack {0} king", currentPlayer.King.IsBlack ? "black" : "white", otherPlayer.King.IsBlack ? "Black" : "White"));
@@ -282,27 +293,25 @@ namespace Assign5
                     {
                         if (pt.X == currentPlayer.King.location.X && pt.Y == currentPlayer.King.location.Y)  //if one of the attacking points includes the king
                         {
-                            p.CanAttackKing = true;
+                            if(!test) p.CanAttackKing = true;
                             return true;
                         }
                     }
                 }
             }
 
-            return true;
+            return false;
         }
 
         public void Leaderboard()
         {
-            StringBuilder lb = new StringBuilder("Final Results");
-            lb.AppendFormat("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter);
-            lb.AppendFormat("There were", moveCounter, "moves this game");
-            lb.AppendFormat("Player 1 lost", player2.killCount, "piece(s)!");
-            lb.AppendFormat("Player 2 lost", player1.killCount, "piece(s)!");
-
-            
-
-
+            myTimer.Stop();
+            StringBuilder lb = new StringBuilder("Final Results\n");
+            lb.AppendLine(String.Format("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter));
+            lb.AppendLine(String.Format("There were {0} moves this game", moveCounter));
+            lb.AppendLine(String.Format("Player 1 lost {0} piece(s)!", player2.killCount));
+            lb.AppendLine(String.Format("Player 2 lost {0} piece(s)!", player1.killCount));
+            finalResults.Text = lb.ToString();
         }
 
         /// <summary>
@@ -313,40 +322,57 @@ namespace Assign5
         {
             Player otherPlayer = currentPlayer == player1 ? player2 : player1;
 
+            Console.WriteLine("Current: {0}, other: {1}", currentPlayer == player1 ? "White" : "Black", currentPlayer == player1 ? "Black" : "White");
+
             bool kingCannotMove = false;
             //Can the king move out of the way?
             List<Point> points = currentPlayer.King.GetMovablePoints(b);
             if(points == null || points.Count == 0)
-                kingCannotMove = true;
+                kingCannotMove = true;  //king can't move
 
+            Console.WriteLine("Current players king is in danger: {0}", kingCannotMove);
+
+            //Can the attack be blocked by another piece?
+            bool canBlock = false;
             //Can the attacking piece be removed from the board?
             bool canRemove = false;
             Piece attackingPiece = null;
             //get the attacking piece
-            foreach (Piece piece in currentPlayer.Pieces)
+            foreach (Piece piece in otherPlayer.Pieces)
                 if (piece.CanAttackKing) attackingPiece = piece; //found attacking piece
             if (attackingPiece == null) return false;    //if there is no attacking piece then there can't be a checkmate!
 
+            Console.WriteLine(attackingPiece.Name);
+
+            List<Point> attackPoints = attackingPiece.GetMovablePoints(b);
+
             //now we check if any of the other player's pieces can remove the attacking piece
-            foreach(Piece otherPiece in otherPlayer.Pieces)
+            foreach (Piece otherPiece in currentPlayer.Pieces)
             {
                 List<Point> otherPoints = otherPiece.GetMovablePoints(b);
                 foreach (Point pt in otherPoints)
                 {
                     if (pt.X == attackingPiece.location.X && pt.Y == attackingPiece.location.Y)
                         canRemove = true;   //set removal flag
+                    else
+                    {
+                        //if I move a piece to a location and do a king check is the king still vulnerable?
+                        //temporarily create dummy piece 
+                        b.board[pt.X, pt.Y] = new Pawn(pt.X, pt.Y, otherPiece.IsBlack, pawnImgW);
+                        if (!IsCheck(true))   //check if there is still a check even if there is a piece at x, y
+                        {
+                            canBlock = true;
+                        }
+                        b.board[pt.X, pt.Y] = null;
+                    }
                 }
             }
 
-            //Can the attack be blocked by another piece?
-            bool canBlock = false;
-            foreach(Piece other in otherPlayer.Pieces)
-            {
+            Console.WriteLine(String.Format("King Cant Move: {0}, canBlock: {1}, canRemove: {2}", kingCannotMove, canBlock, canRemove));
 
-            }
-
-
-            return false;
+            //If all of these flags are true it's probably a checkmate?
+            //kingCannotMove does not cover the event that the king can move but still be checkmated after moving
+            return (!canBlock && !canRemove && kingCannotMove);
         }
 
         private void EndGame()
@@ -399,6 +425,11 @@ namespace Assign5
                 this.Close();
             else if (e.KeyChar == (char)Keys.Return)
                 ResetGame();
+        }
+
+        private void SurrenderButton_Click(object sender, EventArgs e)
+        {
+            Leaderboard();
         }
     }
 }
