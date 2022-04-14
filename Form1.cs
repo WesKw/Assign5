@@ -81,6 +81,8 @@ namespace Assign5
         /// 
         private void ResetGame()
         {
+            if (myTimer != null) myTimer.Stop();
+
             player1 = new Player(true); //creates new players
             player2 = new Player(false);
 
@@ -112,6 +114,8 @@ namespace Assign5
             tcounter = 0;
 
             Time_Label.Text = "00:00";
+
+            moveCounter = 0;
 
             feedbackBox.Text = "";
 
@@ -206,13 +210,14 @@ namespace Assign5
                         }
 
                         moved = true;
+                        if (piece is Pawn pawn) pawn.Moved = moved;
 
                         //if the king is not vulnerable and a piece has been killed we 
                         //can safely remove it from the board
                         if (killedPiece)
                         {
                             otherPlayer.Pieces.Remove(othersPiece);
-                            currentPlayer.killCount++;
+                            currentPlayer.KillCount++;
                         }
                             
 
@@ -313,8 +318,8 @@ namespace Assign5
             StringBuilder lb = new StringBuilder("Final Results\n");
             lb.AppendLine(String.Format("Game lasted for: {0:00}:{1:00}", minutes, tcounter));
             lb.AppendLine(String.Format("There were {0} moves this game", moveCounter));
-            lb.AppendLine(String.Format("Player 1 lost {0} piece(s)!", player2.killCount));
-            lb.AppendLine(String.Format("Player 2 lost {0} piece(s)!", player1.killCount));
+            lb.AppendLine(String.Format("Player 1 lost {0} piece(s)!", player2.KillCount));
+            lb.AppendLine(String.Format("Player 2 lost {0} piece(s)!", player1.KillCount));
             finalResults.Text = lb.ToString();
         }
 

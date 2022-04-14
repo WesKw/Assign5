@@ -108,6 +108,14 @@ namespace Assign5
     /// </summary>
     public class Pawn : Piece
     {
+        private bool moved = false;
+        
+        //checks if the pawn has moved or not
+        public bool Moved
+        {
+            get => moved;
+            set => moved = value;
+        }
         /// <summary>
         /// Set the reference to the desired image
         /// </summary>
@@ -136,12 +144,19 @@ namespace Assign5
             Piece p = boardState.board[location.X, location.Y + offset];
 
             Point initial = new Point(location.X, location.Y + offset);
+            Point initial2 = new Point(location.X, location.Y + offset * 2);    //can move 2 spaces if haven't moved
             Point possible1 = new Point(location.X + offset, location.Y + offset);
             Point possible2 = new Point(location.X - offset, location.Y + offset);
 
             //only add the point if there is no piece in front and on the board
             if (initial.Y < boardState.board.Length && initial.Y >= 0 && p == null)
                 points.Add(initial);
+
+            if(!Moved)
+            {
+                if (p == null && initial2.X < 8 && initial2.Y < 8 && initial2.X >= 0 && initial2.Y >= 0)
+                    points.Add(initial2);
+            }
 
             //add the diagonal points if the pawn can attack a piece on the diagonal
             if (possible1.X >= 0 && possible1.X < 8 && possible1.Y >= 0 && possible1.Y < 8)
