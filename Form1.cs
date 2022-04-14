@@ -48,11 +48,6 @@ namespace Assign5
         public static Image queenImgB = Image.FromFile(@".\icons\black\chess-queen.png");
         #endregion
 
-        //console stuff
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
-
         bool check = false;
         Board b;
         Point lastClicked = new Point(-1, -1);
@@ -63,25 +58,30 @@ namespace Assign5
         Player currentPlayer = null;
 
         uint moveCounter = 0;
-        uint p1killCount = 0;
-        uint p2killCount = 0;
         public static System.Windows.Forms.Timer myTimer;
         public static int tcounter = 0;
         public static int minutes = 0;
 
+        /// <summary>
+        /// Initializes the form for the program
+        /// </summary>
+        /// 
         public Chess()
         {
             InitializeComponent();
             //AllocConsole();
             KeyPreview = true;
             Time_Label.Anchor = AnchorStyles.None;
-            AllocConsole();
             ResetGame();
         }
 
+        /// <summary>
+        /// Resets the game and the pieces to their starting state
+        /// </summary>
+        /// 
         private void ResetGame()
         {
-            player1 = new Player(true);
+            player1 = new Player(true); //creates new players
             player2 = new Player(false);
 
             //Set up board
@@ -273,6 +273,7 @@ namespace Assign5
         }
 
         //Checks if the player's king would be in attacking range at the new point
+
         /// <summary>
         /// Checks if moving a piece exposes the current player's king to an attack
         /// </summary>
@@ -302,12 +303,15 @@ namespace Assign5
 
             return false;
         }
-
+        /// <summary>
+        /// Creates the leaderboard/summary at the end of the game
+        /// </summary>
+        /// 
         public void Leaderboard()
         {
             myTimer.Stop();
             StringBuilder lb = new StringBuilder("Final Results\n");
-            lb.AppendLine(String.Format("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter));
+            lb.AppendLine(String.Format("Game lasted for: {0:00}:{1:00}", minutes, tcounter));
             lb.AppendLine(String.Format("There were {0} moves this game", moveCounter));
             lb.AppendLine(String.Format("Player 1 lost {0} piece(s)!", player2.killCount));
             lb.AppendLine(String.Format("Player 2 lost {0} piece(s)!", player1.killCount));
@@ -375,11 +379,10 @@ namespace Assign5
             return (!canBlock && !canRemove && kingCannotMove);
         }
 
-        private void EndGame()
-        {
-
-        }
-
+        /// <summary>
+        /// Resets the first and last and click on the board
+        /// </summary>
+        /// 
         private void ResetSelection()
         {
             lastSelected = null;
@@ -389,6 +392,10 @@ namespace Assign5
             Game.Refresh();
         }
 
+        /// <summary>
+        /// Set the timer up for the game, and counts how long the game lasts
+        /// </summary>
+        /// 
         public void Timer()
         {
             InitializeComponent();
@@ -401,14 +408,22 @@ namespace Assign5
 
         }
 
+        /// <summary>
+        /// Updates the label on the timer every second during the game
+        /// </summary>
+        /// 
         private void UpdateLabel(object source, EventArgs args)
         {
-            tcounter++;
-            minutes += (tcounter * 1000 / 60000);
-            if (tcounter * 1000 / 60000 != 0) tcounter = 0;
-            Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter);
+            tcounter++; //increments the timer
+            minutes += (tcounter * 1000 / 60000); //converts into minutes
+            if (tcounter * 1000 / 60000 != 0) tcounter = 0; //if the timer
+            Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter); //outputs and formats the timer to minutes:seconds
         }
 
+        /// <summary>
+        /// Disposes of unused memory associated with the timer
+        /// </summary>
+        /// 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             myTimer.Dispose();

@@ -29,18 +29,27 @@ namespace Assign5
         private string name;
         private bool canAttackKing = false;
 
+        /// <summary>
+        /// Name of the pieces 
+        /// </summary>
         public string Name
         {
             get => name;
             set => name = value;
         }
 
+        /// <summary>
+        /// Checks if the piece is black
+        /// </summary>
         public bool IsBlack
         {
             get => isBlack;
             set => isBlack = value;
         }
 
+        /// <summary>
+        /// Checks if the piece can attack the king
+        /// </summary>
         public bool CanAttackKing
         {
             get => canAttackKing;
@@ -58,6 +67,9 @@ namespace Assign5
             isBlack = black;
         }
 
+        /// <summary>
+        /// Checks where the piece can move to
+        /// </summary>
         public void MoveTo(int x, int y)
         {
             location.X = x;
@@ -82,6 +94,9 @@ namespace Assign5
             g.DrawImage(pieceImage, rect);
         }
 
+        /// <summary>
+        /// Clears the memory
+        /// </summary>
         public void Dispose()
         {
             pieceImage = null;
@@ -330,6 +345,10 @@ namespace Assign5
             Name = "Bishop";
         }
 
+        /// <summary>
+        /// Gets a list of points where the piece can move to
+        /// </summary>
+        /// <param name="boardState"></param>
         public override List<Point> GetMovablePoints(Board boardState)
         {
             List<Point> points = new List<Point>();

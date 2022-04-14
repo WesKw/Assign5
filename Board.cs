@@ -20,23 +20,23 @@ namespace Assign5
 {
     public class Board : IDisposable
     {
-        public enum State
-        {
-            NORMAL = 0,
-            CHECK = 1,
-            CHECKMATE = 2
-        }
 
-        public const int SQUARE_SIZE = 60;
+        public const int SQUARE_SIZE = 60; //size of the board
         public Piece[,] board;
         private List<Point> possiblePoints = null;
 
+        /// <summary>
+        /// List of possible movements for the pieces on the board
+        /// </summary>
         public List<Point> PossiblePoints
         {
             get => possiblePoints;
             set => possiblePoints = value;
         }
 
+        /// <summary>
+        /// Initializes the board on the form
+        /// </summary>
         public Board()
         {
             board = new Piece[8, 8]; //initialize board
@@ -77,7 +77,9 @@ namespace Assign5
 
             //g.FillRectangle(highlight, 1 * SQUARE_SIZE, 0 * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
-
+        /// <summary>
+        /// Frees up the memory for the board
+        /// </summary>
         public void Dispose()
         {
             board = null;
