@@ -64,6 +64,10 @@ namespace Assign5
         public static int tcounter = 0;
         public static int minutes = 0;
 
+        /// <summary>
+        /// Initializes the form for the program
+        /// </summary>
+        /// 
         public Chess()
         {
             InitializeComponent();
@@ -73,9 +77,13 @@ namespace Assign5
             ResetGame();
         }
 
+        /// <summary>
+        /// Resets the game and the pieces to their starting state
+        /// </summary>
+        /// 
         private void ResetGame()
         {
-            player1 = new Player(true);
+            player1 = new Player(true); //creates new players
             player2 = new Player(false);
 
             //Set up board
@@ -262,6 +270,7 @@ namespace Assign5
         }
 
         //Checks if the player's king would be in attacking range at the new point
+
         /// <summary>
         /// Checks if moving a piece exposes the current player's king to an attack
         /// </summary>
@@ -291,14 +300,18 @@ namespace Assign5
 
             return true;
         }
-
+        /// <summary>
+        /// Creates the leaderboard/summary at the end of the game
+        /// </summary>
+        /// 
         public void Leaderboard()
         {
-            StringBuilder lb = new StringBuilder("Final Results");
-            lb.AppendFormat("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter);
-            lb.AppendFormat("There were", moveCounter, "moves this game");
-            lb.AppendFormat("Player 1 lost", player2.killCount, "piece(s)!");
-            lb.AppendFormat("Player 2 lost", player1.killCount, "piece(s)!");
+            StringBuilder lb = new StringBuilder("Final Results"); //string builder for the final results
+            lb.AppendFormat("Game lasted for: ","{0:00}:{1:00}", minutes, tcounter); //shows how long the game lasted
+            lb.AppendFormat("There were", moveCounter, "moves this game"); //shows how many moves were made by both players
+            lb.AppendFormat("Player 1 lost", player2.killCount, "piece(s)!"); //how many pieces player 1 lost
+            lb.AppendFormat("Player 2 lost", player1.killCount, "piece(s)!"); //how many pieces player 2 lost 
+
 
             
 
@@ -354,6 +367,10 @@ namespace Assign5
 
         }
 
+        /// <summary>
+        /// Resets the first and last and click on the board
+        /// </summary>
+        /// 
         private void ResetSelection()
         {
             lastSelected = null;
@@ -363,6 +380,10 @@ namespace Assign5
             Game.Refresh();
         }
 
+        /// <summary>
+        /// Set the timer up for the game, and counts how long the game lasts
+        /// </summary>
+        /// 
         public void Timer()
         {
             InitializeComponent();
@@ -375,14 +396,22 @@ namespace Assign5
 
         }
 
+        /// <summary>
+        /// Updates the label on the timer every second during the game
+        /// </summary>
+        /// 
         private void UpdateLabel(object source, EventArgs args)
         {
-            tcounter++;
-            minutes += (tcounter * 1000 / 60000);
-            if (tcounter * 1000 / 60000 != 0) tcounter = 0;
-            Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter);
+            tcounter++; //increments the timer
+            minutes += (tcounter * 1000 / 60000); //converts into minutes
+            if (tcounter * 1000 / 60000 != 0) tcounter = 0; //if the timer
+            Time_Label.Text = string.Format("{0:00}:{1:00}", minutes, tcounter); //outputs and formats the timer to minutes:seconds
         }
 
+        /// <summary>
+        /// Disposes of unused memory associated with the timer
+        /// </summary>
+        /// 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             myTimer.Dispose();

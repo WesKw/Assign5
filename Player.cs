@@ -18,11 +18,14 @@ namespace Assign5
 {
     internal class Player : IDisposable
     {
-        public int killCount = 0;
+        public int killCount = 0; //how many pieces the player has taken out
         public int deadPieces = 0;
         private List<Piece> pieces = null;
         private Piece king;
 
+        /// <summary>
+        /// Gets the list of pieces in the game
+        /// </summary>
         public List<Piece> Pieces
         {
             get => pieces;
