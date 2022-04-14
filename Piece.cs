@@ -220,7 +220,7 @@ namespace Assign5
                     bool stop = false;
                     int j = 1;
                     int dir = i - 2;
-                    while (j < 8)  //move in both x directions until we hit a friendly
+                    while (j < 8)  //move in both y directions until we hit a friendly
                     {
                         Point p1 = new Point(location.X, location.Y + j * dir);
 
@@ -234,11 +234,11 @@ namespace Assign5
                                 break;
                             } else if (boardState.board[p1.X, p1.Y].IsBlack == IsBlack) //must be same color
                             {
-                                break;
+                                break;  //break out of the loop if the same color
                             }
                         } else
                         {
-                            break;
+                            break;  //or break if the location is outside of the board
                         }
                         j++;
                     }
@@ -288,7 +288,7 @@ namespace Assign5
                     if (p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) //if the point is on the board
                         if (boardState.board[p1.X, p1.Y] == null || 
                            (boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
-                        {
+                        { //if the point on the board is empty or has a piece of the opposite color
 
                             points.Add(p1);
                         }
@@ -296,7 +296,7 @@ namespace Assign5
                     if (p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8) //if the point is on the board
                         if (boardState.board[p2.X, p2.Y] == null || 
                            (boardState.board[p2.X, p2.Y] != null && boardState.board[p2.X, p2.Y].IsBlack != IsBlack))
-                        {
+                        { //if the point on the board is empty or has a piece of the opposite color
                             points.Add(p2);
                         }
 
@@ -309,7 +309,7 @@ namespace Assign5
                     if (p1.X >= 0 && p1.X < 8 && p1.Y >= 0 && p1.Y < 8) //if the point is on the board
                         if (boardState.board[p1.X, p1.Y] == null ||
                            (boardState.board[p1.X, p1.Y] != null && boardState.board[p1.X, p1.Y].IsBlack != IsBlack))
-                        {
+                        { //if the point on the board is empty or has a piece of the opposite color
 
                             points.Add(p1);
                         }
@@ -317,7 +317,7 @@ namespace Assign5
                     if (p2.X >= 0 && p2.X < 8 && p2.Y >= 0 && p2.Y < 8) //if the point is on the board
                         if (boardState.board[p2.X, p2.Y] == null ||
                            (boardState.board[p2.X, p2.Y] != null && boardState.board[p2.X, p2.Y].IsBlack != IsBlack))
-                        {
+                        { //if the point on the board is empty or has a piece of the opposite color
                             points.Add(p2);
                         }
                 }
@@ -354,32 +354,32 @@ namespace Assign5
             List<Point> points = new List<Point>();
 
             int i = 1;
-            while(i < 8)
+            while(i < 8)    //get all of the points on the positive x & y diagonal
             {
                 Point p = new Point(location.X + 1 * i, location.Y + 1 * i);
-                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8) //check if point is in bounds
                 {
                     Piece piece = boardState.board[p.X, p.Y];
-                    if (piece == null)
+                    if (piece == null)  //add point if location is empty
                         points.Add(p);
-                    else if ((piece != null && piece.IsBlack != IsBlack))
+                    else if ((piece != null && piece.IsBlack != IsBlack))   //or if piece is opposite color
                     {
                         points.Add(p);
                         break;
                     }
-                    else if (piece.IsBlack == IsBlack)
+                    else if (piece.IsBlack == IsBlack)  //otherwise don't add the point
                         break;
                 }
-                else
+                else //don't add if outside board
                     break;
                 i++;
             }
 
             i = 1;
-            while (i < 8)
+            while (i < 8)   //get all points on negative x, positive y
             {
                 Point p = new Point(location.X + -1 * i, location.Y + 1 * i);
-                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8) //same checks as before, could probably make this a function tbh
                 {
                     Piece piece = boardState.board[p.X, p.Y];
                     if (piece == null)
@@ -398,10 +398,10 @@ namespace Assign5
             }
 
             i = 1;
-            while (i < 8)
+            while (i < 8)   //get all points on the negative x & negative y 
             {
                 Point p = new Point(location.X + -1 * i, location.Y + -1 * i);
-                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8) //same checks apply here
                 {
                     Piece piece = boardState.board[p.X, p.Y];
                     if (piece == null)
@@ -420,10 +420,10 @@ namespace Assign5
             }
 
             i = 1;
-            while (i < 8)
+            while (i < 8)   //get all points on the positive x and negative y
             {
                 Point p = new Point(location.X + 1 * i, location.Y + -1 * i);
-                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8) //same checks as before
                 {
                     Piece piece = boardState.board[p.X, p.Y];
                     if (piece == null)
@@ -474,8 +474,7 @@ namespace Assign5
         {
             List<Point> points = new List<Point>();
 
-            //Is this horrible mess better than manually typing out the points? Hmmmmm
-            //I think it probably is
+            //This is the same loop for the rook piece
             for (int i = 0; i < 4; i++)
             {
                 if (i % 2 == 0)  //if even move in x direction
@@ -541,7 +540,8 @@ namespace Assign5
                 }
             }
 
-            int k = 1;  //reset i
+            //These next loops are the same loops as the bishop piece
+            int k = 1;  
             while (k < 8)
             {
                 Point p = new Point(location.X + 1 * k, location.Y + 1 * k);
@@ -660,22 +660,22 @@ namespace Assign5
         {
             List<Point> points = new List<Point>();
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) //we need 1 point for each direction
             {
-                if(i % 2 == 0)
+                if(i % 2 == 0)  //even, move in x direction
                 {
-                    int dir = i - 1;
-                    Point p = new Point(location.X + 1 * dir, location.Y);
-                    if(p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8 )
+                    int dir = i - 1;    //0 - 1 = -1, or 2 - 1 = 1
+                    Point p = new Point(location.X + 1 * dir, location.Y);  //multiply direction and 1 to get new spot
+                    if(p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8 ) //same in bounds checks
                     {
                         if (boardState.board[p.X, p.Y] == null || (boardState.board[p.X, p.Y] != null && boardState.board[p.X, p.Y].IsBlack != IsBlack))
                             points.Add(p);
                     }
                 } else
                 {
-                    int dir = i - 2;
-                    Point p = new Point(location.X, location.Y + 1 * dir);
-                    if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8)
+                    int dir = i - 2;    //1-2 = -1 or 3-2 = 1
+                    Point p = new Point(location.X, location.Y + 1 * dir);  //multiply dir and 1 to get offset on y
+                    if (p.X >= 0 && p.X < 8 && p.Y >= 0 && p.Y < 8) //same bounds checks as before
                     {
                         if (boardState.board[p.X, p.Y] == null || (boardState.board[p.X, p.Y] != null && boardState.board[p.X, p.Y].IsBlack != IsBlack))
                             points.Add(p);
