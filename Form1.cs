@@ -62,6 +62,11 @@ namespace Assign5
         public static int tcounter = 0;
         public static int minutes = 0;
 
+        //console stuff
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         /// <summary>
         /// Initializes the form for the program
         /// </summary>
@@ -69,9 +74,10 @@ namespace Assign5
         public Chess()
         {
             InitializeComponent();
-            //AllocConsole();
+            AllocConsole();
             KeyPreview = true;
             Time_Label.Anchor = AnchorStyles.None;
+            CheckmateLabel.Anchor = AnchorStyles.None;
             ResetGame();
         }
 
@@ -232,6 +238,9 @@ namespace Assign5
                     feedbackBox.Text = "This spot isn't valid";
                     return; //if we didn't move at all, the game state doesn't change
                 }
+
+                b.PrintBoard();
+
                 moveCounter += 1;
 
                 currentPlayer = otherPlayer;   //only update the current player if a piece moves
@@ -365,14 +374,20 @@ namespace Assign5
                         canRemove = true;   //set removal flag
                     else
                     {
+                        bool tempSet = false;
                         //if I move a piece to a location and do a king check is the king still vulnerable?
                         //temporarily create dummy piece 
-                        b.board[pt.X, pt.Y] = new Pawn(pt.X, pt.Y, otherPiece.IsBlack, pawnImgW);
+                        if(b.board[pt.X, pt.Y] == null)
+                        {
+                            tempSet = true;
+                            b.board[pt.X, pt.Y] = new Pawn(pt.X, pt.Y, otherPiece.IsBlack, pawnImgW);
+                        }
                         if (!IsCheck(true))   //check if there is still a check even if there is a piece at x, y
                         {
                             canBlock = true;
                         }
-                        b.board[pt.X, pt.Y] = null;
+                        if(tempSet) //remove the temorary dummy piece if it was there
+                            b.board[pt.X, pt.Y] = null;
                     }
                 }
             }

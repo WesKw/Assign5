@@ -36,6 +36,7 @@
             this.finalResults = new System.Windows.Forms.RichTextBox();
             this.Time_Label = new System.Windows.Forms.Label();
             this.SurrenderButton = new System.Windows.Forms.Button();
+            this.resetLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Game)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,7 +118,7 @@
             this.SurrenderButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.SurrenderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SurrenderButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.SurrenderButton.Location = new System.Drawing.Point(214, 615);
+            this.SurrenderButton.Location = new System.Drawing.Point(195, 613);
             this.SurrenderButton.Name = "SurrenderButton";
             this.SurrenderButton.Size = new System.Drawing.Size(275, 37);
             this.SurrenderButton.TabIndex = 7;
@@ -126,12 +127,24 @@
             this.SurrenderButton.Visible = false;
             this.SurrenderButton.Click += new System.EventHandler(this.SurrenderButton_Click);
             // 
+            // resetLabel
+            // 
+            this.resetLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.resetLabel.AutoSize = true;
+            this.resetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetLabel.Location = new System.Drawing.Point(665, 516);
+            this.resetLabel.Name = "resetLabel";
+            this.resetLabel.Size = new System.Drawing.Size(291, 18);
+            this.resetLabel.TabIndex = 8;
+            this.resetLabel.Text = "Press \"Return\" or \"Enter\" to reset the game";
+            // 
             // Chess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1029, 662);
+            this.Controls.Add(this.resetLabel);
             this.Controls.Add(this.SurrenderButton);
             this.Controls.Add(this.Time_Label);
             this.Controls.Add(this.finalResults);
@@ -160,6 +173,7 @@
         private System.Windows.Forms.RichTextBox finalResults;
         private System.Windows.Forms.Label Time_Label;
         private System.Windows.Forms.Button SurrenderButton;
+        private System.Windows.Forms.Label resetLabel;
     }
 }
 

@@ -84,5 +84,22 @@ namespace Assign5
         {
             board = null;
         }
+
+        public void PrintBoard()
+        {
+            Console.WriteLine("---------------------------------------");
+            for (int i = 0; i < 8; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    if (board[j, i] != null)
+                        Console.Write(board[j, i].Name + " ");
+                    else
+                        Console.Write("None ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("---------------------------------------");
+        }
     }
 }

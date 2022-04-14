@@ -142,6 +142,7 @@ namespace Assign5
             if (location.Y < 0 || location.Y > 7) return points;    //the new location is outside of the board
 
             Piece p = boardState.board[location.X, location.Y + offset];
+            Piece p2 = boardState.board[location.X, location.Y + offset * 2];
 
             Point initial = new Point(location.X, location.Y + offset);
             Point initial2 = new Point(location.X, location.Y + offset * 2);    //can move 2 spaces if haven't moved
@@ -154,7 +155,7 @@ namespace Assign5
 
             if(!Moved)
             {
-                if (p == null && initial2.X < 8 && initial2.Y < 8 && initial2.X >= 0 && initial2.Y >= 0)
+                if (p == null && p2 == null && initial2.X < 8 && initial2.Y < 8 && initial2.X >= 0 && initial2.Y >= 0)
                     points.Add(initial2);
             }
 
