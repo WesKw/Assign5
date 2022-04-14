@@ -153,7 +153,7 @@ namespace Assign5
             if (initial.Y < boardState.board.Length && initial.Y >= 0 && p == null)
                 points.Add(initial);
 
-            if(!Moved)
+            if(!Moved)  //if the pawn hasn't moved yet it can move 2 spaces forward
             {
                 if (p == null && p2 == null && initial2.X < 8 && initial2.Y < 8 && initial2.X >= 0 && initial2.Y >= 0)
                     points.Add(initial2);
